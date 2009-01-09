@@ -10,10 +10,15 @@ class TestUploader < Test::Unit::TestCase
         @dir = '/home/hlxwell/mmlou_pictures'
       end
       @uploader = Uploader.new(@dir)
+      @filename = '/home/hlxwell/mmlou_pictures/a/apps.facebook.com__babywallaby.jpg'
     end
 
-    should "not be able to upload uploaded photos" do
-      assert @uploader.is_uploaded?('/home/hlxwell/mmlou_pictures/a/apps.facebook.com__babywallaby.jpg')
+    should "be able to record uploaded photos" do
+      assert @uploader.record_uploaded_file(@filename)
+    end
+
+    should "be able to find uploaded photos in uploaded_photos.yaml" do
+      assert @uploader.is_uploaded?(@filename)
     end
     
     context "with upload address and a directory for uploading" do

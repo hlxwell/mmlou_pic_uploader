@@ -14,16 +14,18 @@ require 'rest_client'
 class Uploader
   # 用户ID
   @@USER_ID = '856'
-  # 照片上传地址
-  #@@PHOTO_UPLOAD_ADDRESS = 'http://localhost:3000/photos/create'
-  # 相册建立地址
-  #@@ALBUM_CREATE_ADDRESS = 'http://localhost:3000/albums/create'
 
-  # 照片上传地址
-  @@PHOTO_UPLOAD_ADDRESS = 'http://mmlou.com/photo/create'
-  # 相册建立地址
-  @@ALBUM_CREATE_ADDRESS = 'http://mmlou.com/album/only_create'
+  # yaml 缓存已经上传的图片
+  @@uploaded_photos = YAML.load_file("uploaded_photos.yaml")
 
+  if true
+    @@PHOTO_UPLOAD_ADDRESS = 'http://localhost:3000/photos/create'
+    @@ALBUM_CREATE_ADDRESS = 'http://localhost:3000/albums/create'
+  else
+    @@PHOTO_UPLOAD_ADDRESS = 'http://mmlou.com/photo/create'
+    @@ALBUM_CREATE_ADDRESS = 'http://mmlou.com/album/only_create'
+  end
+  
   #
   # 需要传入需要上传的目录
   #
@@ -74,20 +76,23 @@ class Uploader
   end
 
   def is_uploaded?(file)
-    upload_record = YAML.load_file("uploaded_photos.yaml")
-    
-    if upload_record.include?(file)
+    if @@uploaded_photos.is_a?(Array) && @@uploaded_photos.include?(file)
       true
     else
       false
     end    
   end
 
-  def record_uploaded_file(file)
-    upload_record = YAML.load_file("uploaded_photos.yaml")
-    upload_record << file
-    File.open 'uploaded_photos.yaml','w' do |t|
-      t.write(upload_record.to_yaml)
+  def record_uploaded_file(filename)
+    unless @@uploaded_photos.is_a?(Array)
+      @@uploaded_photos = []
     end
+    @@uploaded_photos << filename
+    File.open 'uploaded_photos.yaml','w' do |t|
+      t.write(@@uploaded_photos.to_yaml)
+    end
+    true
+  rescue
+    false
   end
 end
