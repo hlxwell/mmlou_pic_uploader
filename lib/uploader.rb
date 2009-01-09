@@ -25,7 +25,7 @@ class Uploader
     @@PHOTO_UPLOAD_ADDRESS = 'http://mmlou.com/photo/create'
     @@ALBUM_CREATE_ADDRESS = 'http://mmlou.com/album/only_create'
   end
-  
+
   #
   # 需要传入需要上传的目录
   #
@@ -77,6 +77,9 @@ class Uploader
 
   def is_uploaded?(file)
     if @@uploaded_photos.is_a?(Array) && @@uploaded_photos.include?(file)
+      ### alert: file is uploaded
+      puts "File Uploaded: #{file}"
+
       true
     else
       false
