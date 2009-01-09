@@ -22,8 +22,8 @@ class Uploader
     @@PHOTO_UPLOAD_ADDRESS = 'http://localhost:3000/photos/create'
     @@ALBUM_CREATE_ADDRESS = 'http://localhost:3000/albums/create'
   else
-    @@PHOTO_UPLOAD_ADDRESS = 'http://mmlou.com/photo/create'
-    @@ALBUM_CREATE_ADDRESS = 'http://mmlou.com/album/only_create'
+    @@PHOTO_UPLOAD_ADDRESS = 'http://mmlou.com:81/photo/create'
+    @@ALBUM_CREATE_ADDRESS = 'http://mmlou.com:81/album/only_create'
   end
 
   #
@@ -57,7 +57,8 @@ class Uploader
 
       ### traversal all files for each directory #################################
       uploaded_pictures = file_finder.all_files(album[:name]).map do |file|
-        
+        next unless File.basename(file) =~ /jpg/i
+
         unless is_uploaded?(file)
           ## 1 upload file
           puts "\t" + file
