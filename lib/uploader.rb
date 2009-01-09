@@ -13,7 +13,7 @@ require 'rest_client'
 
 class Uploader
   # 用户ID
-  @@USER_ID = '856'
+  @@USER_ID = '859'
 
   # yaml 缓存已经上传的图片
   @@uploaded_photos = YAML.load_file("uploaded_photos.yaml")
@@ -26,6 +26,9 @@ class Uploader
     @@ALBUM_CREATE_ADDRESS = 'http://mmlou.com:81/album/only_create'
   end
 
+  # 超时时间
+  @@timeout_seconds = 600
+  
   #
   # 需要传入需要上传的目录
   #
@@ -62,11 +65,17 @@ class Uploader
         unless is_uploaded?(file)
           ## 1 upload file
           puts "\t" + file
-          command = "curl -F albumId=#{album[:id]} -F user_id=#{album[:user_id]} -F \"file=@#{file}\" #{@@PHOTO_UPLOAD_ADDRESS}"
-          `#{command}`
+          command = "curl -F albumId=#{album[:id]} -F user_id=#{album[:user_id]} -F \"file=@#{file}\" #{@@PHOTO_UPLOAD_ADDRESS} -m #{@@timeout_seconds}"
+          photo_id = `#{command}`
 
-          ## 2 add uploaded file record
-          record_uploaded_file(file)
+          # check if timed out
+          unless photo_id =~ /timed out/i
+            # add uploaded file record
+            record_uploaded_file(file)
+            photo_id
+          else
+            next
+          end
         end
       end
 

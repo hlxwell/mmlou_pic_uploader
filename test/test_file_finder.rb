@@ -8,8 +8,14 @@ class TestFileFinder < Test::Unit::TestCase
         if RUBY_PLATFORM =~ /win/i
           @file_finder = FileFinder.new("E:\\6.Photos\\decrate")
         else
-          @file_finder = FileFinder.new('/home/hlxwell/mmlou_pictures')
+          @file_finder = FileFinder.new('/media/Hlxwell/6.Photos/13')
         end
+#        total = 0
+#        puts @file_finder.all_directories.size
+#        @file_finder.all_directories.each do |dir|
+#           total += @file_finder.all_files(dir).size
+#        end
+#        puts total
       end
 
       should "be able to list all the directories in 1 dir deepth" do
