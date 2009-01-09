@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf8"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>upload (Uploader)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/uploader.rb, line 27</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">upload</span>
+    <span class="ruby-identifier">user_id</span> = <span class="ruby-value">1</span>
+    <span class="ruby-identifier">file_finder</span> = <span class="ruby-constant">FileFinder</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@dir</span>)
+    <span class="ruby-identifier">directories</span> = <span class="ruby-identifier">file_finder</span>.<span class="ruby-identifier">all_directories</span>
+
+    <span class="ruby-comment cmt">#</span>
+    <span class="ruby-comment cmt"># 建立一个album传入</span>
+    <span class="ruby-comment cmt"># 相册名,描述，user_id</span>
+    <span class="ruby-comment cmt"># 返回id</span>
+    <span class="ruby-comment cmt"># </span>
+    <span class="ruby-comment cmt"># 把目录里的文件传入指定album_id里去</span>
+    <span class="ruby-comment cmt"># 返回album_id和pic_count</span>
+    <span class="ruby-comment cmt">#</span>
+    <span class="ruby-identifier">albums</span> = <span class="ruby-identifier">directories</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir_name</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">album_id</span> = <span class="ruby-constant">Album</span>.<span class="ruby-identifier">create</span>(<span class="ruby-ivar">@@ALBUM_CREATE_ADDRESS</span>, <span class="ruby-identifier">user_id</span>, <span class="ruby-identifier">dir_name</span>, <span class="ruby-identifier">dir_name</span>)
+      {<span class="ruby-identifier">:id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">album_id</span>, <span class="ruby-identifier">:name=</span><span class="ruby-operator">&gt;</span> <span class="ruby-identifier">dir_name</span>, <span class="ruby-identifier">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">user_id</span>}
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt">#</span>
+    <span class="ruby-comment cmt"># traversal all directories 遍历所有目录</span>
+    <span class="ruby-comment cmt">#</span>
+    <span class="ruby-identifier">uploaded_albums</span> = <span class="ruby-identifier">albums</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">album</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment cmt"># init params</span>
+      <span class="ruby-identifier">fields_hash</span> = {
+        <span class="ruby-identifier">:photo</span> =<span class="ruby-operator">&gt;</span> {
+          <span class="ruby-identifier">:description</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">album</span>[<span class="ruby-identifier">:name</span>],
+          <span class="ruby-identifier">:tags</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'xx'</span>,
+          <span class="ruby-identifier">:album_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">album</span>[<span class="ruby-identifier">:id</span>],
+          <span class="ruby-identifier">:user_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">album</span>[<span class="ruby-identifier">:user_id</span>]
+        }
+      }
+
+      <span class="ruby-comment cmt"># traversal all files for each directory</span>
+      <span class="ruby-identifier">uploaded_pictures</span> = <span class="ruby-identifier">file_finder</span>.<span class="ruby-identifier">all_files</span>(<span class="ruby-identifier">album</span>[<span class="ruby-identifier">:name</span>]).<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">file</span><span class="ruby-operator">|</span>
+        <span class="ruby-constant">RestClient</span>.<span class="ruby-identifier">post</span> <span class="ruby-ivar">@@PHOTO_UPLOAD_ADDRESS</span>, <span class="ruby-identifier">fields_hash</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:file</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">file</span>))
+      <span class="ruby-keyword kw">end</span>
+
+      {<span class="ruby-identifier">:name=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">album</span>[<span class="ruby-identifier">:name</span>], <span class="ruby-identifier">:pic_count=</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">uploaded_pictures</span>.<span class="ruby-identifier">size</span>}
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">uploaded_albums</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

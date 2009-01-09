@@ -1,0 +1,6 @@
+== mmlou picture uploader
+
+It is used for batch upload picture to mmlou.com.
+
+Usage:
+ruby main.rb /path/to/albums
