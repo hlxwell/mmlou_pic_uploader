@@ -15,9 +15,6 @@ class TestUploader < Test::Unit::TestCase
 
     should "be able to record uploaded photos" do
       assert @uploader.record_uploaded_file(@filename)
-    end
-
-    should "be able to find uploaded photos in uploaded_photos.yaml" do
       assert @uploader.is_uploaded?(@filename)
     end
     
