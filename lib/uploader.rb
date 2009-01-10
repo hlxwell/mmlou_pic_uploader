@@ -28,7 +28,7 @@ class Uploader
   # yaml 缓存已经上传的图片
   @@uploaded_photos = YAML.load_file("uploaded_photos.yaml")
 
-  if true
+  if false
     @@PHOTO_UPLOAD_ADDRESS = 'http://localhost:3000/photos/create'
     @@ALBUM_CREATE_ADDRESS = 'http://localhost:3000/albums/create'
   else
@@ -89,7 +89,7 @@ class Uploader
 
             # check if uploaded
             # upload file and get photo id
-            puts "\t uploading: " + file
+            puts "Thread-#{i} uploading: " + file
             command = "curl -F albumId=#{album[:id]} -F user_id=#{album[:user_id]} -F \"file=@#{file}\" #{@@PHOTO_UPLOAD_ADDRESS} -m #{@@timeout_seconds}"
             photo_id = `#{command}`
 
@@ -100,6 +100,7 @@ class Uploader
 
               # we need this counter to get all uploaded photo
               uploaded_pictures << photo_id
+              puts "Thread-#{i} uploaded: " + file
             else
               next
             end
