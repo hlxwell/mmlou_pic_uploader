@@ -1,6 +1,7 @@
 Dir.glob(File.join(File.dirname(__FILE__), 'uploader.rb'))
 require 'uploader'
-root = "/media/Hlxwell/6.Photos/13"
+root = "/media/Hlxwell/6.Photos/12"
 @uploader = Uploader.new(root)
-result = @uploader.upload
-puts result.inspect
+photos_num, albums_num = @uploader.upload
+
+puts "Uploaded #{photos_num} photos, and #{albums_num} albums."

@@ -1,3 +1,4 @@
+
 require File.dirname(__FILE__) + '/base'
 
 class TestFileFinder < Test::Unit::TestCase
@@ -10,12 +11,12 @@ class TestFileFinder < Test::Unit::TestCase
         else
           @file_finder = FileFinder.new('/media/Hlxwell/6.Photos/13')
         end
-#        total = 0
-#        puts @file_finder.all_directories.size
-#        @file_finder.all_directories.each do |dir|
-#           total += @file_finder.all_files(dir).size
-#        end
-#        puts total
+        total = 0
+        puts @file_finder.all_directories.size
+        @file_finder.all_directories.each do |dir|
+           total += FileFinder.all_files(dir).size
+        end
+        puts total
       end
 
       should "be able to list all the directories in 1 dir deepth" do
@@ -25,10 +26,10 @@ class TestFileFinder < Test::Unit::TestCase
 
       should "be able to list all file for all subdirectory of root directory" do
         @file_finder.all_directories.each do |dir|
-          @file_finder.all_files(dir).each do |file|
+          FileFinder.all_files(dir).each do |file|
             assert File.file?(file)
           end
-          assert @file_finder.all_files(dir).size > 0
+          assert FileFinder.all_files(dir).size > 0
         end
       end
     end

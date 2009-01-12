@@ -3,7 +3,6 @@
 #
 
 require 'rubygems'
-require 'rest_client'
 
 class Album
   # 静态方法
@@ -12,7 +11,10 @@ class Album
     #TODO avoid recreate Album
     album_id = `curl -F album[user_id]=#{user_id} -F album[name]=\"#{name}\" -F album[description]=\"#{description}\" #{address}`
 
-    return album_id
-    #RestClient.post(address,:album=>{:user_id=>user_id, :name=>name, :description=>description})
+    if album_id =~ /^\d+$/
+      return album_id
+    else
+      return false
+    end    
   end
 end

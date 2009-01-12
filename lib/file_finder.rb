@@ -7,6 +7,9 @@
 #     /xxx1.jpg
 #     /xxx2.jpg
 #
+
+require 'rubygems'
+
 class FileFinder
 
   #
@@ -33,8 +36,8 @@ class FileFinder
     end
 
     directories.each do |dir|
-      if File.directory?(@root+dir)
-        full_directories << @root+dir
+      if File.directory?(@root + dir)
+        full_directories << @root + dir
       end
     end
     return full_directories
@@ -44,7 +47,7 @@ class FileFinder
   # 返回指定目录下的所有文件
   # 参数：目录名
   #
-  def all_files(dir)
+  def self.all_files(dir)
     files = Dir.entries(dir)
     full_files = []
 

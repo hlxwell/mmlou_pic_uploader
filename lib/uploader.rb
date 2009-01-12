@@ -8,7 +8,6 @@ Dir.glob(File.join(File.dirname(__FILE__), 'file_finder.rb'))
 require 'album'
 require 'file_finder'
 require 'rubygems'
-require 'rest_client'
 require 'thread'
 
 class Object
@@ -21,9 +20,13 @@ class Object
 	end
 end
 
+#
+# 上传图片
+# TODO: upload manager
+#
 class Uploader
   # 用户ID
-  @@USER_ID = '859'
+  @@USER_ID = '865'
 
   # yaml 缓存已经上传的图片
   @@uploaded_photos = YAML.load_file("uploaded_photos.yaml")
@@ -37,7 +40,7 @@ class Uploader
   end
 
   # 超时时间
-  @@timeout_seconds = 600
+  @@timeout_seconds = 120
 
   #
   # 需要传入需要上传的目录
@@ -64,17 +67,23 @@ class Uploader
     #
     uploaded_albums = directories.map do |dir_name|
       ### create album ###########################################################
-      puts 'ALBUM: ' + File.basename(dir_name)
-      album_id = Album.create(@@ALBUM_CREATE_ADDRESS, user_id, File.basename(dir_name), dir_name)
+      puts "\n ALBUM: " + File.basename(dir_name)
+
+      @files = FileFinder.all_files(dir_name)
+      if is_all_files_uploaded?(@files)
+        next
+      else
+        album_id = Album.create(@@ALBUM_CREATE_ADDRESS, user_id, File.basename(dir_name), File.basename(dir_name))
+      end
+
       album = {:id => album_id, :name=> dir_name, :user_id => user_id}
 
       @threads = []
-      @files = file_finder.all_files(album[:name])
       uploaded_pictures = []
       
-      50.times do |i|
+      10.times do |i|
         @threads << Thread.new do
-          ##################################################
+          ### Thread start #####################################
           while @files.size > 0
             file = nil
             # check out job 取任务的时候需要排队取
@@ -89,18 +98,20 @@ class Uploader
 
             # check if uploaded
             # upload file and get photo id
-            puts "Thread-#{i} uploading: " + file
+            puts "\nThread-#{i} uploading: " + file
             command = "curl -F albumId=#{album[:id]} -F user_id=#{album[:user_id]} -F \"file=@#{file}\" #{@@PHOTO_UPLOAD_ADDRESS} -m #{@@timeout_seconds}"
             photo_id = `#{command}`
 
-            # check if timed out
-            unless photo_id =~ /timed out/i
-              # add uploaded file record
-              record_uploaded_file(file)
+            # check if timed out            
+            if photo_id =~ /\d+/
+              @@uploaded_photos.synchronize do
+                # add uploaded file record
+                record_uploaded_file(file)
 
-              # we need this counter to get all uploaded photo
-              uploaded_pictures << photo_id
-              puts "Thread-#{i} uploaded: " + file
+                # we need this counter to get all uploaded photo
+                uploaded_pictures << photo_id
+                puts "\nThread-#{i} uploaded: (photo id #{photo_id}) " + file
+              end
             else
               next
             end
@@ -113,34 +124,20 @@ class Uploader
         t.join
       end
 
-      #      ### traversal all files for each directory #################################
-      #      uploaded_pictures = file_finder.all_files(album[:name]).map do |file|
-      #        # check if uploaded
-      #        unless is_uploaded?(file)
-      #          # upload file and get photo id
-      #          puts "\t" + file
-      #          command = "curl -F albumId=#{album[:id]} -F user_id=#{album[:user_id]} -F \"file=@#{file}\" #{@@PHOTO_UPLOAD_ADDRESS} -m #{@@timeout_seconds}"
-      #          photo_id = `#{command}`
-      #
-      #          # check if timed out
-      #          unless photo_id =~ /timed out/i
-      #            # add uploaded file record
-      #            record_uploaded_file(file)
-      #            photo_id
-      #          else
-      #            next
-      #          end
-      #        end
-      #      end
-
-
       ### return uploaded albums #################################################
       {:name=>album[:name], :pic_count=>uploaded_pictures.size}
     end
-    
-    return uploaded_albums
+
+    photos_num = 0
+    uploaded_albums.each do |album|
+      photos_num += album[:pic_count].to_i if album
+    end
+    return photos_num, uploaded_albums.size
   end
 
+
+
+  private
   def is_uploaded?(file)
     return false if file.nil?
     # skip if not jpg
@@ -154,6 +151,15 @@ class Uploader
     else
       false
     end
+  end
+
+  def is_all_files_uploaded?(files)
+    files.each do |file|
+      unless is_uploaded?(file)
+        return false
+      end
+    end
+    true
   end
 
   def record_uploaded_file(filename)
