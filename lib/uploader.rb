@@ -24,12 +24,13 @@ end
 # 上传图片
 # TODO: upload manager
 #
+
 class Uploader
   # 用户ID
-  @@USER_ID = '865'
+  @@USER_ID = '869'
 
   # yaml 缓存已经上传的图片
-  @@uploaded_photos = YAML.load_file("uploaded_photos.yaml")
+  @@uploaded_photos = []
 
   if false
     @@PHOTO_UPLOAD_ADDRESS = 'http://localhost:3000/photos/create'
@@ -40,13 +41,14 @@ class Uploader
   end
 
   # 超时时间
-  @@timeout_seconds = 120
+  @@timeout_seconds = 60
 
   #
   # 需要传入需要上传的目录
   #
   def initialize(dir)
     @dir = dir
+    @@uploaded_photos = Uploader.load_yaml_file()
   end
 
   #
@@ -65,10 +67,18 @@ class Uploader
     # 把目录里的文件传入指定album_id里去
     # 返回album_id和pic_count
     #
+    switch = false
     uploaded_albums = directories.map do |dir_name|
       ### create album ###########################################################
       puts "\n ALBUM: " + File.basename(dir_name)
 
+      #选择从哪个目录开始传
+      if dir_name =~ /SAYURI_ANZU_in_Thailand/i or switch
+        switch = true
+      else
+        next
+      end
+      
       @files = FileFinder.all_files(dir_name)
       if is_all_files_uploaded?(@files)
         next
@@ -76,7 +86,7 @@ class Uploader
         album_id = Album.create(@@ALBUM_CREATE_ADDRESS, user_id, File.basename(dir_name), File.basename(dir_name))
       end
 
-      album = {:id => album_id, :name=> dir_name, :user_id => user_id}
+      album = {:id => album_id, :name=> File.basename(dir_name), :user_id => user_id}
 
       @threads = []
       uploaded_pictures = []
@@ -99,18 +109,19 @@ class Uploader
             # check if uploaded
             # upload file and get photo id
             puts "\nThread-#{i} uploading: " + file
-            command = "curl -F albumId=#{album[:id]} -F user_id=#{album[:user_id]} -F \"file=@#{file}\" #{@@PHOTO_UPLOAD_ADDRESS} -m #{@@timeout_seconds}"
+            command = "curl -F albumId=#{album[:id]} -F tags=\"#{album[:name]}\" -F user_id=#{album[:user_id]} -F \"file=@#{file}\" #{@@PHOTO_UPLOAD_ADDRESS} -m #{@@timeout_seconds}"
             photo_id = `#{command}`
 
             # check if timed out            
-            if photo_id =~ /\d+/
+            if photo_id == 'true'
               @@uploaded_photos.synchronize do
                 # add uploaded file record
-                record_uploaded_file(file)
+                while not record_uploaded_file(file)
+                end
 
                 # we need this counter to get all uploaded photo
                 uploaded_pictures << photo_id
-                puts "\nThread-#{i} uploaded: (photo id #{photo_id}) " + file
+                puts "\nThread-#{i} uploaded: " + file
               end
             else
               next
@@ -135,9 +146,21 @@ class Uploader
     return photos_num, uploaded_albums.size
   end
 
+  def record_uploaded_file(filename)
+    @@uploaded_photos = [] unless @@uploaded_photos.is_a?(Array)
+    @@uploaded_photos << filename
+    File.open 'uploaded_photos.yaml','w' do |t|
+      t.write(@@uploaded_photos.to_yaml)
+    end
+    #backup
+    File.open 'uploaded_photos.yaml.bak','w' do |t|
+      t.write(@@uploaded_photos.to_yaml)
+    end
+    true
+  rescue
+    false
+  end
 
-
-  private
   def is_uploaded?(file)
     return false if file.nil?
     # skip if not jpg
@@ -146,7 +169,6 @@ class Uploader
     if @@uploaded_photos.is_a?(Array) && @@uploaded_photos.include?(file)
       ### alert: file is uploaded
       puts "File Uploaded: #{file}"
-
       true
     else
       false
@@ -162,14 +184,14 @@ class Uploader
     true
   end
 
-  def record_uploaded_file(filename)
-    @@uploaded_photos = [] unless @@uploaded_photos.is_a?(Array)
-    @@uploaded_photos << filename
-    File.open 'uploaded_photos.yaml','w' do |t|
-      t.write(@@uploaded_photos.to_yaml)
+  def self.load_yaml_file
+    record = File.size("uploaded_photos.yaml")
+    bak_record = File.size("uploaded_photos.yaml.bak")
+
+    if record >= bak_record
+      YAML.load_file("uploaded_photos.yaml")
+    else
+      YAML.load_file("uploaded_photos.yaml.bak")
     end
-    true
-  rescue
-    false
   end
 end

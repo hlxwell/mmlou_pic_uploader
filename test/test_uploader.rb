@@ -9,13 +9,31 @@ class TestUploader < Test::Unit::TestCase
       else
         @dir = '/home/hlxwell/mmlou_pictures'
       end
-      @uploader = Uploader.new(@dir)
       @filename = '/home/hlxwell/mmlou_pictures/a/apps.facebook.com__babywallaby.jpg'
+
+      @uploader = Uploader.new(@dir)
+    end
+
+    should "load the big yaml between 2 uploaded_photos.yaml" do
+      record = File.size("uploaded_photos.yaml")
+      bak_record = File.size("uploaded_photos.yaml.bak")
+
+      if record >= bak_record
+        YAML.expects(:load_file).with("uploaded_photos.yaml")
+      else
+        YAML.expects(:load_file).with("uploaded_photos.yaml.bak")
+      end
+      Uploader.new(@dir)
     end
 
     should "be able to record uploaded photos" do
       assert @uploader.record_uploaded_file(@filename)
       assert @uploader.is_uploaded?(@filename)
+    end
+
+    should "record uploaded files to yaml for twice with one backup file" do
+      File.expects(:open).at_least(2)
+      @uploader.record_uploaded_file(@filename)
     end
     
     context "with upload address and a directory for uploading" do
