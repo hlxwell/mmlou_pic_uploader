@@ -156,7 +156,7 @@
       C0 code coverage information
     </h3>
     <p>
-      Generated on Mon Jan 05 15:13:30 +0800 2009 with 
+      Generated on Thu Jan 15 11:36:14 +0800 2009 with 
       <a href='http://eigenclass.org/hiki/rcov'>
         rcov 0.8.1.2
       </a>
@@ -174,81 +174,245 @@
     <td class='heading'> Total coverage </td> <td class='heading'> Code coverage
     </td> </tr> </thead> <tbody> <tr class='light'> <td> <a
     href='lib-uploader_rb.html'> lib/uploader.rb </a> </td> <td
-    class='lines_total'> <tt> 55 </tt> </td> <td class='lines_code'> <tt> 35
+    class='lines_total'> <tt> 197 </tt> </td> <td class='lines_code'> <tt> 126
     </tt> </td> <td> <table cellspacing='0' align='right' cellpadding='0'> <tr>
-    <td> <tt class='coverage_total'> 100.0% </tt> &nbsp; </td> <td> <table
+    <td> <tt class='coverage_total'> 41.1% </tt> &nbsp; </td> <td> <table
     class='percent_graph' cellspacing='0' width='100' cellpadding='0'> <tr> <td
-    class='covered' width='100' /> <td class='uncovered' width='0' /> </tr>
+    class='covered' width='41' /> <td class='uncovered' width='59' /> </tr>
     </table> </td> </tr> </table> </td> <td> <table cellspacing='0'
-    align='right' cellpadding='0'> <tr> <td> <tt class='coverage_code'> 100.0%
+    align='right' cellpadding='0'> <tr> <td> <tt class='coverage_code'> 34.1%
     </tt> &nbsp; </td> <td> <table class='percent_graph' cellspacing='0'
-    width='100' cellpadding='0'> <tr> <td class='covered' width='100' /> <td
-    class='uncovered' width='0' /> </tr> </table> </td> </tr> </table> </td>
-    </tr> </tbody> </table><pre><span class="marked1"><a name="line1"></a> 1
-    Dir.glob(File.join(File.dirname(__FILE__), 'album.rb')) </span><span
-    class="marked0"><a name="line2"></a> 2
+    width='100' cellpadding='0'> <tr> <td class='covered' width='34' /> <td
+    class='uncovered' width='66' /> </tr> </table> </td> </tr> </table> </td>
+    </tr> </tbody> </table><pre><span class="inferred1"><a name="line1"></a> 1 #
+    </span><span class="inferred0"><a name="line2"></a> 2 # 文件上传器
+    </span><span class="inferred1"><a name="line3"></a> 3 # </span><span
+    class="inferred0"><a name="line4"></a> 4 </span><span class="marked1"><a
+    name="line5"></a> 5 Dir.glob(File.join(File.dirname(__FILE__), 'album.rb'))
+    </span><span class="marked0"><a name="line6"></a> 6
     Dir.glob(File.join(File.dirname(__FILE__), 'file_finder.rb')) </span><span
-    class="inferred1"><a name="line3"></a> 3 </span><span class="marked0"><a
-    name="line4"></a> 4 require 'rubygems' </span><span class="marked1"><a
-    name="line5"></a> 5 require 'rest_client' </span><span class="inferred0"><a
-    name="line6"></a> 6 </span><span class="marked1"><a name="line7"></a> 7
-    class Uploader </span><span class="marked0"><a name="line8"></a> 8
-    @@PHOTO_UPLOAD_ADDRESS = 'http://localhost:3000/photos' </span><span
-    class="marked1"><a name="line9"></a> 9 @@ALBUM_CREATE_ADDRESS =
-    'http://localhost:3000/albums' </span><span class="inferred0"><a
-    name="line10"></a>10 </span><span class="marked1"><a name="line11"></a>11
-    def initialize(dir) </span><span class="marked0"><a name="line12"></a>12
-    @dir = dir </span><span class="inferred1"><a name="line13"></a>13 end
-    </span><span class="inferred0"><a name="line14"></a>14 </span><span
-    class="marked1"><a name="line15"></a>15 def upload </span><span
-    class="marked0"><a name="line16"></a>16 user_id = 1 </span><span
-    class="marked1"><a name="line17"></a>17 file_finder = FileFinder.new(@dir)
-    </span><span class="marked0"><a name="line18"></a>18 directories =
-    file_finder.all_directories </span><span class="inferred1"><a
-    name="line19"></a>19 </span><span class="inferred0"><a name="line20"></a>20
-    # </span><span class="inferred1"><a name="line21"></a>21 #
-    建立一个album传入 </span><span class="inferred0"><a
-    name="line22"></a>22 # 相册名,描述，user_id </span><span
-    class="inferred1"><a name="line23"></a>23 # 返回id </span><span
-    class="inferred0"><a name="line24"></a>24 # </span><span
-    class="inferred1"><a name="line25"></a>25 #
-    把目录里的文件传入指定album_id里去 </span><span
-    class="inferred0"><a name="line26"></a>26 # 返回album_id和pic_count
-    </span><span class="inferred1"><a name="line27"></a>27 # </span><span
-    class="marked0"><a name="line28"></a>28 albums = directories.map do
-    |dir_name| </span><span class="marked1"><a name="line29"></a>29 album_id =
-    Album.create(@@ALBUM_CREATE_ADDRESS, user_id, dir_name, dir_name)
-    </span><span class="marked0"><a name="line30"></a>30 {:id =&gt; album_id,
-    :name=&gt; dir_name, :user_id =&gt; user_id} </span><span
-    class="inferred1"><a name="line31"></a>31 end </span><span
-    class="inferred0"><a name="line32"></a>32 </span><span class="inferred1"><a
-    name="line33"></a>33 # traversal all directories </span><span
-    class="marked0"><a name="line34"></a>34 uploaded_albums = albums.map do
-    |album| </span><span class="inferred1"><a name="line35"></a>35 # init params
-    </span><span class="marked0"><a name="line36"></a>36 fields_hash = {
-    </span><span class="inferred1"><a name="line37"></a>37 :photo =&gt; {
-    </span><span class="inferred0"><a name="line38"></a>38 :description =&gt;
-    album[:name], </span><span class="inferred1"><a name="line39"></a>39 :tags
-    =&gt; 'xx', </span><span class="inferred0"><a name="line40"></a>40 :album_id
-    =&gt; album[:id], </span><span class="inferred1"><a name="line41"></a>41
-    :user_id =&gt; album[:user_id] </span><span class="inferred0"><a
-    name="line42"></a>42 } </span><span class="inferred1"><a
-    name="line43"></a>43 } </span><span class="inferred0"><a
-    name="line44"></a>44 </span><span class="inferred1"><a name="line45"></a>45
-    # traversal all files for each directory </span><span class="marked0"><a
-    name="line46"></a>46 uploaded_pictures =
-    file_finder.all_files(album[:name]).map do |file| </span><span
-    class="marked1"><a name="line47"></a>47 RestClient.post
-    @@PHOTO_UPLOAD_ADDRESS, fields_hash.merge(:file =&gt; File.new(file))
-    </span><span class="inferred0"><a name="line48"></a>48 end </span><span
-    class="inferred1"><a name="line49"></a>49 </span><span class="marked0"><a
-    name="line50"></a>50 {:name=&gt;album[:name],
-    :pic_count=&gt;uploaded_pictures.size} </span><span class="inferred1"><a
-    name="line51"></a>51 end </span><span class="inferred0"><a
-    name="line52"></a>52 </span><span class="marked1"><a name="line53"></a>53
-    return uploaded_albums </span><span class="inferred0"><a
-    name="line54"></a>54 end </span><span class="inferred1"><a
-    name="line55"></a>55 end </span></pre>
+    class="inferred1"><a name="line7"></a> 7 </span><span class="inferred0"><a
+    name="line8"></a> 8 #require 'album' </span><span class="inferred1"><a
+    name="line9"></a> 9 #require 'file_finder' </span><span class="marked0"><a
+    name="line10"></a> 10 require 'rubygems' </span><span class="marked1"><a
+    name="line11"></a> 11 require 'thread' </span><span class="inferred0"><a
+    name="line12"></a> 12 </span><span class="marked1"><a name="line13"></a> 13
+    class Object </span><span class="marked0"><a name="line14"></a> 14 def
+    synchronize </span><span class="uncovered1"><a name="line15"></a> 15
+    mutex.synchronize { yield self } </span><span class="uncovered0"><a
+    name="line16"></a> 16 end </span><span class="inferred1"><a
+    name="line17"></a> 17 </span><span class="marked0"><a name="line18"></a> 18
+    def mutex </span><span class="uncovered1"><a name="line19"></a> 19 @mutex
+    ||= Mutex.new </span><span class="uncovered0"><a name="line20"></a> 20 end
+    </span><span class="uncovered1"><a name="line21"></a> 21 end </span><span
+    class="inferred0"><a name="line22"></a> 22 </span><span class="inferred1"><a
+    name="line23"></a> 23 # </span><span class="inferred0"><a name="line24"></a>
+    24 # 上传图片 </span><span class="inferred1"><a name="line25"></a> 25 #
+    TODO: upload manager </span><span class="inferred0"><a name="line26"></a> 26
+    # </span><span class="inferred1"><a name="line27"></a> 27 </span><span
+    class="marked0"><a name="line28"></a> 28 class Uploader </span><span
+    class="inferred1"><a name="line29"></a> 29 # 用户ID </span><span
+    class="marked0"><a name="line30"></a> 30 @@USER_ID = '869' </span><span
+    class="inferred1"><a name="line31"></a> 31 </span><span class="inferred0"><a
+    name="line32"></a> 32 # yaml 缓存已经上传的图片 </span><span
+    class="marked1"><a name="line33"></a> 33 @@uploaded_photos = [] </span><span
+    class="inferred0"><a name="line34"></a> 34 </span><span class="marked1"><a
+    name="line35"></a> 35 if false </span><span class="uncovered0"><a
+    name="line36"></a> 36 @@PHOTO_UPLOAD_ADDRESS =
+    'http://localhost:3000/photos/create' </span><span class="uncovered1"><a
+    name="line37"></a> 37 @@ALBUM_CREATE_ADDRESS =
+    'http://localhost:3000/albums/create' </span><span class="inferred0"><a
+    name="line38"></a> 38 else </span><span class="marked1"><a
+    name="line39"></a> 39 @@PHOTO_UPLOAD_ADDRESS =
+    'http://mmlou.com:81/photo/create' </span><span class="marked0"><a
+    name="line40"></a> 40 @@ALBUM_CREATE_ADDRESS =
+    'http://mmlou.com:81/album/only_create' </span><span class="inferred1"><a
+    name="line41"></a> 41 end </span><span class="inferred0"><a
+    name="line42"></a> 42 </span><span class="inferred1"><a name="line43"></a>
+    43 # 超时时间 </span><span class="marked0"><a name="line44"></a> 44
+    @@timeout_seconds = 60 </span><span class="inferred1"><a name="line45"></a>
+    45 </span><span class="inferred0"><a name="line46"></a> 46 # </span><span
+    class="inferred1"><a name="line47"></a> 47 #
+    需要传入需要上传的目录 </span><span class="inferred0"><a
+    name="line48"></a> 48 # </span><span class="marked1"><a name="line49"></a>
+    49 def initialize(dir) </span><span class="marked0"><a name="line50"></a> 50
+    @dir = dir </span><span class="marked1"><a name="line51"></a> 51
+    @@uploaded_photos = Uploader.load_yaml_file() </span><span
+    class="inferred0"><a name="line52"></a> 52 end </span><span
+    class="inferred1"><a name="line53"></a> 53 </span><span class="inferred0"><a
+    name="line54"></a> 54 # </span><span class="inferred1"><a name="line55"></a>
+    55 # 开始上传文件 </span><span class="inferred0"><a name="line56"></a>
+    56 # </span><span class="marked1"><a name="line57"></a> 57 def upload
+    </span><span class="uncovered0"><a name="line58"></a> 58 user_id = @@USER_ID
+    </span><span class="uncovered1"><a name="line59"></a> 59 file_finder =
+    FileFinder.new(@dir) </span><span class="uncovered0"><a name="line60"></a>
+    60 directories = file_finder.all_directories </span><span
+    class="uncovered1"><a name="line61"></a> 61 </span><span
+    class="uncovered0"><a name="line62"></a> 62 # </span><span
+    class="uncovered1"><a name="line63"></a> 63 # 建立一个album传入
+    </span><span class="uncovered0"><a name="line64"></a> 64 #
+    相册名,描述，user_id </span><span class="uncovered1"><a
+    name="line65"></a> 65 # 返回id </span><span class="uncovered0"><a
+    name="line66"></a> 66 # </span><span class="uncovered1"><a
+    name="line67"></a> 67 # 把目录里的文件传入指定album_id里去
+    </span><span class="uncovered0"><a name="line68"></a> 68 #
+    返回album_id和pic_count </span><span class="uncovered1"><a
+    name="line69"></a> 69 # </span><span class="uncovered0"><a
+    name="line70"></a> 70 switch = false </span><span class="uncovered1"><a
+    name="line71"></a> 71 uploaded_albums = directories.map do |dir_name|
+    </span><span class="uncovered0"><a name="line72"></a> 72 ### create album
+    ########################################################### </span><span
+    class="uncovered1"><a name="line73"></a> 73 puts &quot;\n ALBUM: &quot; +
+    File.basename(dir_name) </span><span class="uncovered0"><a
+    name="line74"></a> 74 </span><span class="uncovered1"><a name="line75"></a>
+    75 #选择从哪个目录开始传 </span><span class="uncovered0"><a
+    name="line76"></a> 76 if dir_name =~ /SAYURI_ANZU_in_Thailand/i or switch
+    </span><span class="uncovered1"><a name="line77"></a> 77 switch = true
+    </span><span class="uncovered0"><a name="line78"></a> 78 else </span><span
+    class="uncovered1"><a name="line79"></a> 79 next </span><span
+    class="uncovered0"><a name="line80"></a> 80 end </span><span
+    class="uncovered1"><a name="line81"></a> 81 </span><span
+    class="uncovered0"><a name="line82"></a> 82 @files =
+    FileFinder.all_files(dir_name) </span><span class="uncovered1"><a
+    name="line83"></a> 83 if is_all_files_uploaded?(@files) </span><span
+    class="uncovered0"><a name="line84"></a> 84 next </span><span
+    class="uncovered1"><a name="line85"></a> 85 else </span><span
+    class="uncovered0"><a name="line86"></a> 86 album_id =
+    Album.create(@@ALBUM_CREATE_ADDRESS, user_id, File.basename(dir_name),
+    File.basename(dir_name)) </span><span class="uncovered1"><a
+    name="line87"></a> 87 end </span><span class="uncovered0"><a
+    name="line88"></a> 88 </span><span class="uncovered1"><a name="line89"></a>
+    89 album = {:id =&gt; album_id, :name=&gt; File.basename(dir_name), :user_id
+    =&gt; user_id} </span><span class="uncovered0"><a name="line90"></a> 90
+    </span><span class="uncovered1"><a name="line91"></a> 91 @threads = []
+    </span><span class="uncovered0"><a name="line92"></a> 92 uploaded_pictures =
+    [] </span><span class="uncovered1"><a name="line93"></a> 93 </span><span
+    class="uncovered0"><a name="line94"></a> 94 10.times do |i| </span><span
+    class="uncovered1"><a name="line95"></a> 95 @threads &lt;&lt; Thread.new do
+    </span><span class="uncovered0"><a name="line96"></a> 96 ### Thread start
+    ##################################### </span><span class="uncovered1"><a
+    name="line97"></a> 97 while @files.size &gt; 0 </span><span
+    class="uncovered0"><a name="line98"></a> 98 file = nil </span><span
+    class="uncovered1"><a name="line99"></a> 99 # check out job
+    取任务的时候需要排队取 </span><span class="uncovered0"><a
+    name="line100"></a>100 @files.synchronize do </span><span
+    class="uncovered1"><a name="line101"></a>101 begin </span><span
+    class="uncovered0"><a name="line102"></a>102 file = @files.pop </span><span
+    class="uncovered1"><a name="line103"></a>103 end while is_uploaded?(file)
+    </span><span class="uncovered0"><a name="line104"></a>104 end </span><span
+    class="uncovered1"><a name="line105"></a>105 </span><span
+    class="uncovered0"><a name="line106"></a>106 # quit if no file get
+    </span><span class="uncovered1"><a name="line107"></a>107 break unless file
+    </span><span class="uncovered0"><a name="line108"></a>108 </span><span
+    class="uncovered1"><a name="line109"></a>109 # check if uploaded
+    </span><span class="uncovered0"><a name="line110"></a>110 # upload file and
+    get photo id </span><span class="uncovered1"><a name="line111"></a>111 puts
+    &quot;\nThread-#{i} uploading: &quot; + file </span><span
+    class="uncovered0"><a name="line112"></a>112 command = &quot;curl -F
+    albumId=#{album[:id]} -F tags=\&quot;#{album[:name]}\&quot; -F
+    user_id=#{album[:user_id]} -F \&quot;file=@#{file}\&quot;
+    #{@@PHOTO_UPLOAD_ADDRESS} -m #{@@timeout_seconds}&quot; </span><span
+    class="uncovered1"><a name="line113"></a>113 photo_id = `#{command}`
+    </span><span class="uncovered0"><a name="line114"></a>114 </span><span
+    class="uncovered1"><a name="line115"></a>115 # check if timed out
+    </span><span class="uncovered0"><a name="line116"></a>116 if photo_id ==
+    'true' </span><span class="uncovered1"><a name="line117"></a>117
+    @@uploaded_photos.synchronize do </span><span class="uncovered0"><a
+    name="line118"></a>118 # add uploaded file record </span><span
+    class="uncovered1"><a name="line119"></a>119 while not
+    record_uploaded_file(file) </span><span class="uncovered0"><a
+    name="line120"></a>120 end </span><span class="uncovered1"><a
+    name="line121"></a>121 </span><span class="uncovered0"><a
+    name="line122"></a>122 # we need this counter to get all uploaded photo
+    </span><span class="uncovered1"><a name="line123"></a>123 uploaded_pictures
+    &lt;&lt; photo_id </span><span class="uncovered0"><a name="line124"></a>124
+    puts &quot;\nThread-#{i} uploaded: &quot; + file </span><span
+    class="uncovered1"><a name="line125"></a>125 end </span><span
+    class="uncovered0"><a name="line126"></a>126 else </span><span
+    class="uncovered1"><a name="line127"></a>127 next </span><span
+    class="uncovered0"><a name="line128"></a>128 end </span><span
+    class="uncovered1"><a name="line129"></a>129 end </span><span
+    class="uncovered0"><a name="line130"></a>130
+    ################################################### </span><span
+    class="uncovered1"><a name="line131"></a>131 end </span><span
+    class="uncovered0"><a name="line132"></a>132 end </span><span
+    class="uncovered1"><a name="line133"></a>133 </span><span
+    class="uncovered0"><a name="line134"></a>134 @threads.each do |t|
+    </span><span class="uncovered1"><a name="line135"></a>135 t.join
+    </span><span class="uncovered0"><a name="line136"></a>136 end </span><span
+    class="uncovered1"><a name="line137"></a>137 </span><span
+    class="uncovered0"><a name="line138"></a>138 ### return uploaded albums
+    ################################################# </span><span
+    class="uncovered1"><a name="line139"></a>139 {:name=&gt;album[:name],
+    :pic_count=&gt;uploaded_pictures.size} </span><span class="uncovered0"><a
+    name="line140"></a>140 end </span><span class="uncovered1"><a
+    name="line141"></a>141 </span><span class="uncovered0"><a
+    name="line142"></a>142 photos_num = 0 </span><span class="uncovered1"><a
+    name="line143"></a>143 uploaded_albums.each do |album| </span><span
+    class="uncovered0"><a name="line144"></a>144 photos_num +=
+    album[:pic_count].to_i if album </span><span class="uncovered1"><a
+    name="line145"></a>145 end </span><span class="uncovered0"><a
+    name="line146"></a>146 return photos_num, uploaded_albums.size </span><span
+    class="uncovered1"><a name="line147"></a>147 end </span><span
+    class="inferred0"><a name="line148"></a>148 </span><span class="marked1"><a
+    name="line149"></a>149 def record_uploaded_file(filename) </span><span
+    class="marked0"><a name="line150"></a>150 @@uploaded_photos = [] unless
+    @@uploaded_photos.is_a?(Array) </span><span class="marked1"><a
+    name="line151"></a>151 @@uploaded_photos &lt;&lt; filename </span><span
+    class="marked0"><a name="line152"></a>152 File.open
+    'uploaded_photos.yaml','w' do |t| </span><span class="marked1"><a
+    name="line153"></a>153 t.write(@@uploaded_photos.to_yaml) </span><span
+    class="inferred0"><a name="line154"></a>154 end </span><span
+    class="inferred1"><a name="line155"></a>155 #backup </span><span
+    class="marked0"><a name="line156"></a>156 File.open
+    'uploaded_photos.yaml.bak','w' do |t| </span><span class="marked1"><a
+    name="line157"></a>157 t.write(@@uploaded_photos.to_yaml) </span><span
+    class="inferred0"><a name="line158"></a>158 end </span><span
+    class="marked1"><a name="line159"></a>159 true </span><span
+    class="uncovered0"><a name="line160"></a>160 rescue </span><span
+    class="uncovered1"><a name="line161"></a>161 false </span><span
+    class="uncovered0"><a name="line162"></a>162 end </span><span
+    class="inferred1"><a name="line163"></a>163 </span><span class="marked0"><a
+    name="line164"></a>164 def is_uploaded?(file) </span><span
+    class="marked1"><a name="line165"></a>165 return false if file.nil?
+    </span><span class="inferred0"><a name="line166"></a>166 # skip if not jpg
+    </span><span class="marked1"><a name="line167"></a>167 return true unless
+    File.basename(file) =~ /jpg/i </span><span class="inferred0"><a
+    name="line168"></a>168 </span><span class="marked1"><a
+    name="line169"></a>169 if @@uploaded_photos.is_a?(Array) &amp;&amp;
+    @@uploaded_photos.include?(file) </span><span class="inferred0"><a
+    name="line170"></a>170 ### alert: file is uploaded </span><span
+    class="marked1"><a name="line171"></a>171 puts &quot;File Uploaded:
+    #{file}&quot; </span><span class="marked0"><a name="line172"></a>172 true
+    </span><span class="uncovered1"><a name="line173"></a>173 else </span><span
+    class="uncovered0"><a name="line174"></a>174 false </span><span
+    class="uncovered1"><a name="line175"></a>175 end </span><span
+    class="uncovered0"><a name="line176"></a>176 end </span><span
+    class="inferred1"><a name="line177"></a>177 </span><span class="marked0"><a
+    name="line178"></a>178 def is_all_files_uploaded?(files) </span><span
+    class="uncovered1"><a name="line179"></a>179 files.each do |file|
+    </span><span class="uncovered0"><a name="line180"></a>180 unless
+    is_uploaded?(file) </span><span class="uncovered1"><a name="line181"></a>181
+    return false </span><span class="uncovered0"><a name="line182"></a>182 end
+    </span><span class="uncovered1"><a name="line183"></a>183 end </span><span
+    class="uncovered0"><a name="line184"></a>184 true </span><span
+    class="uncovered1"><a name="line185"></a>185 end </span><span
+    class="inferred0"><a name="line186"></a>186 </span><span class="marked1"><a
+    name="line187"></a>187 def self.load_yaml_file </span><span
+    class="marked0"><a name="line188"></a>188 record =
+    File.size(&quot;uploaded_photos.yaml&quot;) </span><span class="marked1"><a
+    name="line189"></a>189 bak_record =
+    File.size(&quot;uploaded_photos.yaml.bak&quot;) </span><span
+    class="inferred0"><a name="line190"></a>190 </span><span class="marked1"><a
+    name="line191"></a>191 if record &gt;= bak_record </span><span
+    class="marked0"><a name="line192"></a>192
+    YAML.load_file(&quot;uploaded_photos.yaml&quot;) </span><span
+    class="uncovered1"><a name="line193"></a>193 else </span><span
+    class="uncovered0"><a name="line194"></a>194
+    YAML.load_file(&quot;uploaded_photos.yaml.bak&quot;) </span><span
+    class="uncovered1"><a name="line195"></a>195 end </span><span
+    class="uncovered0"><a name="line196"></a>196 end </span><span
+    class="uncovered1"><a name="line197"></a>197 end </span></pre>
     <hr />
     <p> Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'> rcov
     code coverage analysis tool for Ruby </a> version 0.8.1.2. </p>

@@ -8,7 +8,8 @@ class TestFileFinder < Test::Unit::TestCase
         if RUBY_PLATFORM =~ /win/i
           @file_finder = FileFinder.new("E:\\6.Photos\\decrate")
         else
-          @file_finder = FileFinder.new('/media/Hlxwell/6.Photos/7')
+          #@file_finder = FileFinder.new('/media/Hlxwell/6.Photos/7')
+          @file_finder = FileFinder.new('/home/hlxwell/mmlou_pictures')
         end
         total = 0
         puts @file_finder.all_directories.size

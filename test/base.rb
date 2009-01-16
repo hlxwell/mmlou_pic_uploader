@@ -1,10 +1,10 @@
-Dir.glob(File.join(File.dirname(__FILE__), '../lib/*.rb')).each do |f|
-  require f unless f =~ /main.rb/
-end
+#Dir.glob(File.join(File.dirname(__FILE__), '../lib/*.rb')).each do |f|
+#  require f unless f =~ /main.rb/
+#end
 
-#require File.dirname(__FILE__)+'/../lib/filefinder'
-#require File.dirname(__FILE__)+'/../lib/album'
-#require File.dirname(__FILE__)+'/../lib/uploader'
+require File.dirname(__FILE__)+'/../lib/album'
+require File.dirname(__FILE__)+'/../lib/file_finder'
+require File.dirname(__FILE__)+'/../lib/uploader'
 
 require 'test/unit'
 require 'rubygems'

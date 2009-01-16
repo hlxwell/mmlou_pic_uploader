@@ -156,7 +156,7 @@
       C0 code coverage information
     </h3>
     <p>
-      Generated on Mon Jan 05 15:13:30 +0800 2009 with 
+      Generated on Thu Jan 15 11:36:14 +0800 2009 with 
       <a href='http://eigenclass.org/hiki/rcov'>
         rcov 0.8.1.2
       </a>
@@ -174,66 +174,78 @@
     <td class='heading'> Total coverage </td> <td class='heading'> Code coverage
     </td> </tr> </thead> <tbody> <tr class='light'> <td> <a
     href='lib-file_finder_rb.html'> lib/file_finder.rb </a> </td> <td
-    class='lines_total'> <tt> 50 </tt> </td> <td class='lines_code'> <tt> 35
+    class='lines_total'> <tt> 62 </tt> </td> <td class='lines_code'> <tt> 33
     </tt> </td> <td> <table cellspacing='0' align='right' cellpadding='0'> <tr>
-    <td> <tt class='coverage_total'> 96.0% </tt> &nbsp; </td> <td> <table
+    <td> <tt class='coverage_total'> 100.0% </tt> &nbsp; </td> <td> <table
     class='percent_graph' cellspacing='0' width='100' cellpadding='0'> <tr> <td
-    class='covered' width='96' /> <td class='uncovered' width='4' /> </tr>
+    class='covered' width='100' /> <td class='uncovered' width='0' /> </tr>
     </table> </td> </tr> </table> </td> <td> <table cellspacing='0'
-    align='right' cellpadding='0'> <tr> <td> <tt class='coverage_code'> 94.3%
+    align='right' cellpadding='0'> <tr> <td> <tt class='coverage_code'> 100.0%
     </tt> &nbsp; </td> <td> <table class='percent_graph' cellspacing='0'
-    width='100' cellpadding='0'> <tr> <td class='covered' width='94' /> <td
-    class='uncovered' width='6' /> </tr> </table> </td> </tr> </table> </td>
+    width='100' cellpadding='0'> <tr> <td class='covered' width='100' /> <td
+    class='uncovered' width='0' /> </tr> </table> </td> </tr> </table> </td>
     </tr> </tbody> </table><pre><span class="inferred1"><a name="line1"></a> 1 #
-    Directory tree: </span><span class="inferred0"><a name="line2"></a> 2 #
-    mmlou_pictures </span><span class="inferred1"><a name="line3"></a> 3 #
-    /album1 </span><span class="inferred0"><a name="line4"></a> 4 # /xxx0.jpg
-    </span><span class="inferred1"><a name="line5"></a> 5 # /xxx1.jpg
-    </span><span class="inferred0"><a name="line6"></a> 6 # /xxx2.jpg
-    </span><span class="inferred1"><a name="line7"></a> 7 </span><span
-    class="marked0"><a name="line8"></a> 8 class FileFinder </span><span
-    class="marked1"><a name="line9"></a> 9 def initialize(root) </span><span
-    class="marked0"><a name="line10"></a>10 if root =~ /\/$/ </span><span
-    class="inferred1"><a name="line11"></a>11 @root = root </span><span
-    class="inferred0"><a name="line12"></a>12 else </span><span
-    class="marked1"><a name="line13"></a>13 @root = root + '/' </span><span
-    class="inferred0"><a name="line14"></a>14 end </span><span
-    class="inferred1"><a name="line15"></a>15 end </span><span
-    class="inferred0"><a name="line16"></a>16 </span><span class="marked1"><a
-    name="line17"></a>17 def hello </span><span class="uncovered0"><a
-    name="line18"></a>18 puts 'hello' </span><span class="uncovered1"><a
-    name="line19"></a>19 end </span><span class="inferred0"><a
-    name="line20"></a>20 </span><span class="marked1"><a name="line21"></a>21
-    def all_directories </span><span class="marked0"><a name="line22"></a>22
-    full_directories = [] </span><span class="marked1"><a name="line23"></a>23
-    directories = Dir.entries(@root) </span><span class="inferred0"><a
-    name="line24"></a>24 </span><span class="inferred1"><a name="line25"></a>25
-    #remove . and .. dir </span><span class="marked0"><a name="line26"></a>26
-    [&quot;.&quot;,&quot;..&quot;].each do |dir| </span><span class="marked1"><a
-    name="line27"></a>27 directories.delete(dir) </span><span
-    class="inferred0"><a name="line28"></a>28 end </span><span
-    class="inferred1"><a name="line29"></a>29 </span><span class="marked0"><a
-    name="line30"></a>30 directories.each do |dir| </span><span
-    class="marked1"><a name="line31"></a>31 if File.directory?(@root+dir)
-    </span><span class="marked0"><a name="line32"></a>32 full_directories
-    &lt;&lt; @root+dir </span><span class="inferred1"><a name="line33"></a>33
-    end </span><span class="inferred0"><a name="line34"></a>34 end </span><span
-    class="marked1"><a name="line35"></a>35 return full_directories </span><span
-    class="inferred0"><a name="line36"></a>36 end </span><span
+    </span><span class="inferred0"><a name="line2"></a> 2 #
+    文件列举器，帮助找到文件目录中的所有文件夹和文件
+    </span><span class="inferred1"><a name="line3"></a> 3 # Directory tree:
+    </span><span class="inferred0"><a name="line4"></a> 4 # mmlou_pictures
+    </span><span class="inferred1"><a name="line5"></a> 5 # /album1 </span><span
+    class="inferred0"><a name="line6"></a> 6 # /xxx0.jpg </span><span
+    class="inferred1"><a name="line7"></a> 7 # /xxx1.jpg </span><span
+    class="inferred0"><a name="line8"></a> 8 # /xxx2.jpg </span><span
+    class="inferred1"><a name="line9"></a> 9 # </span><span class="inferred0"><a
+    name="line10"></a>10 </span><span class="marked1"><a name="line11"></a>11
+    require 'rubygems' </span><span class="inferred0"><a name="line12"></a>12
+    </span><span class="marked1"><a name="line13"></a>13 class FileFinder
+    </span><span class="inferred0"><a name="line14"></a>14 </span><span
+    class="inferred1"><a name="line15"></a>15 # </span><span
+    class="inferred0"><a name="line16"></a>16 # 传入需要寻找的目录
+    </span><span class="inferred1"><a name="line17"></a>17 # </span><span
+    class="marked0"><a name="line18"></a>18 def initialize(root) </span><span
+    class="marked1"><a name="line19"></a>19 if root =~ /\/$/ </span><span
+    class="inferred0"><a name="line20"></a>20 @root = root </span><span
+    class="inferred1"><a name="line21"></a>21 else </span><span
+    class="marked0"><a name="line22"></a>22 @root = root + '/' </span><span
+    class="inferred1"><a name="line23"></a>23 end </span><span
+    class="inferred0"><a name="line24"></a>24 end </span><span
+    class="inferred1"><a name="line25"></a>25 </span><span class="inferred0"><a
+    name="line26"></a>26 # </span><span class="inferred1"><a
+    name="line27"></a>27 # 返回所有目录夹 </span><span
+    class="inferred0"><a name="line28"></a>28 # </span><span class="marked1"><a
+    name="line29"></a>29 def all_directories </span><span class="marked0"><a
+    name="line30"></a>30 full_directories = [] </span><span class="marked1"><a
+    name="line31"></a>31 directories = Dir.entries(@root) </span><span
+    class="inferred0"><a name="line32"></a>32 </span><span class="inferred1"><a
+    name="line33"></a>33 #remove . and .. dir </span><span class="marked0"><a
+    name="line34"></a>34 [&quot;.&quot;,&quot;..&quot;].each do |dir|
+    </span><span class="marked1"><a name="line35"></a>35 directories.delete(dir)
+    </span><span class="inferred0"><a name="line36"></a>36 end </span><span
     class="inferred1"><a name="line37"></a>37 </span><span class="marked0"><a
-    name="line38"></a>38 def all_files(dir) </span><span class="marked1"><a
-    name="line39"></a>39 files = Dir.entries(dir) </span><span
-    class="marked0"><a name="line40"></a>40 full_files = [] </span><span
-    class="inferred1"><a name="line41"></a>41 </span><span class="marked0"><a
-    name="line42"></a>42 files.each do |file| </span><span class="marked1"><a
-    name="line43"></a>43 if File.file?(dir+'/'+file) </span><span
-    class="marked0"><a name="line44"></a>44 full_files &lt;&lt; dir+'/'+file
-    </span><span class="inferred1"><a name="line45"></a>45 end </span><span
-    class="inferred0"><a name="line46"></a>46 end </span><span
-    class="inferred1"><a name="line47"></a>47 </span><span class="marked0"><a
-    name="line48"></a>48 return full_files </span><span class="inferred1"><a
-    name="line49"></a>49 end </span><span class="inferred0"><a
-    name="line50"></a>50 end </span></pre>
+    name="line38"></a>38 directories.each do |dir| </span><span
+    class="marked1"><a name="line39"></a>39 if File.directory?(@root + dir)
+    </span><span class="marked0"><a name="line40"></a>40 full_directories
+    &lt;&lt; @root + dir </span><span class="inferred1"><a name="line41"></a>41
+    end </span><span class="inferred0"><a name="line42"></a>42 end </span><span
+    class="marked1"><a name="line43"></a>43 return full_directories </span><span
+    class="inferred0"><a name="line44"></a>44 end </span><span
+    class="inferred1"><a name="line45"></a>45 </span><span class="inferred0"><a
+    name="line46"></a>46 # </span><span class="inferred1"><a
+    name="line47"></a>47 # 返回指定目录下的所有文件 </span><span
+    class="inferred0"><a name="line48"></a>48 # 参数：目录名 </span><span
+    class="inferred1"><a name="line49"></a>49 # </span><span class="marked0"><a
+    name="line50"></a>50 def self.all_files(dir) </span><span class="marked1"><a
+    name="line51"></a>51 files = Dir.entries(dir) </span><span
+    class="marked0"><a name="line52"></a>52 full_files = [] </span><span
+    class="inferred1"><a name="line53"></a>53 </span><span class="marked0"><a
+    name="line54"></a>54 files.each do |file| </span><span class="marked1"><a
+    name="line55"></a>55 if File.file?(dir+'/'+file) </span><span
+    class="marked0"><a name="line56"></a>56 full_files &lt;&lt; dir+'/'+file
+    </span><span class="inferred1"><a name="line57"></a>57 end </span><span
+    class="inferred0"><a name="line58"></a>58 end </span><span
+    class="inferred1"><a name="line59"></a>59 </span><span class="marked0"><a
+    name="line60"></a>60 return full_files </span><span class="inferred1"><a
+    name="line61"></a>61 end </span><span class="inferred0"><a
+    name="line62"></a>62 end </span></pre>
     <hr />
     <p> Generated using the <a href='http://eigenclass.org/hiki.rb?rcov'> rcov
     code coverage analysis tool for Ruby </a> version 0.8.1.2. </p>

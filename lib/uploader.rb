@@ -1,10 +1,6 @@
 #
 # 文件上传器
 #
-
-Dir.glob(File.join(File.dirname(__FILE__), 'album.rb'))
-Dir.glob(File.join(File.dirname(__FILE__), 'file_finder.rb'))
-
 require 'album'
 require 'file_finder'
 require 'rubygems'
@@ -27,7 +23,7 @@ end
 
 class Uploader
   # 用户ID
-  @@USER_ID = '869'
+  @@USER_ID = '875'
 
   # yaml 缓存已经上传的图片
   @@uploaded_photos = []
@@ -73,11 +69,11 @@ class Uploader
       puts "\n ALBUM: " + File.basename(dir_name)
 
       #选择从哪个目录开始传
-      if dir_name =~ /SAYURI_ANZU_in_Thailand/i or switch
-        switch = true
-      else
-        next
-      end
+#      if dir_name =~ /SAYURI_ANZU_in_Thailand/i or switch
+#        switch = true
+#      else
+#        next
+#      end
       
       @files = FileFinder.all_files(dir_name)
       if is_all_files_uploaded?(@files)
